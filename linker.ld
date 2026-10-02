@@ -1,8 +1,8 @@
-ENTRY(main)
+ENTRY(_start)
 
 SECTIONS
 {
-	. = 0x1000;
+	. = 0x7c00;
 
 	.text :
 	{
@@ -11,17 +11,32 @@ SECTIONS
 
 	.rodata :
 	{
-		*(.rodata)
+		*(.rodata*)
 	}
 
 	.data :
 	{
-		*(.data)
+		*(.data*)
 	}
 
 	.bss :
 	{
-		*(.bss)
+		*(.bss*)
 		*(COMMON)
+	}
+
+	. = 0x7dfe;
+
+	.boot_signature :
+	{
+		BYTE(0x55)
+		BYTE(0xaa)
+	}
+
+	/DISCARD/ :
+	{
+		*(.eh_frame)
+		*(.note*)
+		*(.comment)
 	}
 }
