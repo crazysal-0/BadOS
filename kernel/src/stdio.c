@@ -24,6 +24,11 @@ void putc(char c) {
         }
 }
 
+void puts(const char* str) {
+        while (*str)
+                putc(*str++);
+}
+
 void clear(void) {
         cursor_col = 0;
         cursor_row = 0;

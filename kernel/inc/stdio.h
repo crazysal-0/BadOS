@@ -25,4 +25,5 @@ typedef enum {
 } color_t;
 
 void putc(char c);
+void puts(const char* str);
 void clear(void);
