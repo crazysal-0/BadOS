@@ -49,6 +49,8 @@ void main(void) {
                         puts("  clear - Clear the screen\n");
                         puts("  help  - Show this message\n");
                         puts("  echo  - Print a message\n");
+                        puts("  ls    - List files in the current directory\n");
+                        puts("  pwd   - Print the current directory\n");
                 } else {
                         puts("\nUnknown command: ");
                         puts(buffer);
