@@ -12,16 +12,30 @@ static uint16_t cursor_row = 0;
 static uint16_t cursor_col = 0;
 
 void putc(char c) {
+        if (c == '\b') {
+                if (cursor_col > 0) {
+                        cursor_col--;
+
+                        uint16_t color = (bg_color << 12) | (text_color << 8);
+                        volatile uint16_t* location =
+                            vga_buffer + (cursor_row * VGA_WIDTH + cursor_col);
+
+                        *location = color | ' ';
+                }
+
+                return;
+        }
+
         if (c == '\n') {
                 cursor_col = 0;
                 cursor_row++;
         } else if (c == '\t') {
                 cursor_col += 8;
         } else {
-                uint16_t color = (bg_color << 12) | (text_color << 8); // make colors 1 byte
+                uint16_t color = (bg_color << 12) | (text_color << 8);
                 volatile uint16_t* location = vga_buffer + (cursor_row * VGA_WIDTH + cursor_col);
-                *location = color | (uint8_t)c;
 
+                *location = color | (uint8_t)c;
                 cursor_col++;
         }
 }
@@ -47,7 +61,7 @@ void set_color(color_t bg, color_t text) {
         text_color = text;
 }
 
-void gets(char* buffer, size_t size) {
+void gets(char* buffer, uint16_t size) {
         uint16_t i = 0;
 
         while (i < size - 1) {
@@ -55,6 +69,9 @@ void gets(char* buffer, size_t size) {
 
                 if (c == '\n')
                         break;
+
+                if (c == '\x1b')
+                        continue;
 
                 if (c == '\b') {
                         if (i > 0) {
@@ -65,9 +82,7 @@ void gets(char* buffer, size_t size) {
                         continue;
                 }
 
-                buffer[i] = c;
-                i++;
-
+                buffer[i++] = c;
                 putc(c);
         }
 
