@@ -2,9 +2,9 @@
 
 #include "stdint.h"
 
-#define outb(port, value) __asm__ volatile("outb %0, %1" : : "a"(value), "Nd"(port))
+#define OUTB(port, value) __asm__ volatile("outb %0, %1" : : "a"(value), "Nd"(port))
 
-#define inb(port)                                                                                  \
+#define INB(port)                                                                                  \
         ({                                                                                         \
                 uint8_t value;                                                                     \
                 __asm__ volatile("inb %1, %0" : "=a"(value) : "Nd"(port));                         \

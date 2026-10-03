@@ -6,7 +6,10 @@ void main(void) {
         clear();
         set_color(BLACK, LIGHT_GREEN);
 
-        puts("Welcome to BareOS!");
+        puts("Welcome to BareOS!\n");
+        puts(" > ");
+        char buffer[256];
+        gets(buffer, sizeof(buffer));
 
         for (;;) {
         }

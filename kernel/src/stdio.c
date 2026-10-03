@@ -1,4 +1,6 @@
 #include "stdio.h"
+#include "keyboard.h"
+#include "stddef.h"
 #include "stdint.h"
 
 static color_t bg_color = BLACK;
@@ -43,4 +45,31 @@ void clear(void) {
 void set_color(color_t bg, color_t text) {
         bg_color = bg;
         text_color = text;
+}
+
+void gets(char* buffer, size_t size) {
+        uint16_t i = 0;
+
+        while (i < size - 1) {
+                char c = keyboard_getc();
+
+                if (c == '\n')
+                        break;
+
+                if (c == '\b') {
+                        if (i > 0) {
+                                i--;
+                                putc('\b');
+                        }
+
+                        continue;
+                }
+
+                buffer[i] = c;
+                i++;
+
+                putc(c);
+        }
+
+        buffer[i] = '\0';
 }
