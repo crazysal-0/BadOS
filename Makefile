@@ -1,8 +1,12 @@
 ASM = nasm
 CC = gcc
 
-CFLAGS = -m16 -ffreestanding -fno-pie -fno-stack-protector -fno-asynchronous-unwind-tables -fno-unwind-tables -Wall -Wextra -Ikernel/inc
-LDFLAGS = -m16 -nostdlib -static -T linker.ld -Wl,--oformat=binary
+CFLAGS = -m16 -ffreestanding -fno-pie -fno-stack-protector \
+         -fno-asynchronous-unwind-tables -fno-unwind-tables \
+         -Wall -Wextra -Ikernel/inc
+
+LDFLAGS = -m16 -nostdlib -static -T linker.ld \
+          -Wl,--oformat=binary
 
 BIN = bin
 

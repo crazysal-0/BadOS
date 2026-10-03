@@ -39,3 +39,8 @@ void clear(void) {
                 vga_buffer[i] = color | ' ';
         }
 }
+
+void set_color(color_t bg, color_t text) {
+        bg_color = bg;
+        text_color = text;
+}
