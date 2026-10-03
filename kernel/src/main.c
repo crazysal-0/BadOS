@@ -1,3 +1,4 @@
+#include "fs.h"
 #include "io.h"
 #include "stdbool.h"
 #include "stdio.h"
@@ -8,7 +9,12 @@ void main(void) {
         clear();
         set_color(BLACK, LIGHT_GREEN);
 
-        puts("Welcome to BareOS!\n\n");
+        bfs_init();
+        Folder* root = bfs_root();
+
+        bfs_create_file(root, "file", "txt");
+
+        puts("Welcome to BadOS!\n");
 
         while (true) {
                 puts(" > ");
@@ -18,13 +24,6 @@ void main(void) {
 
                 if (streq(buffer, "clear")) {
                         clear();
-                } else if (streq(buffer, "")) {
-                        puts("\n");
-                } else if (streq(buffer, "help")) {
-                        puts("\nAvailable commands:\n");
-                        puts("  clear - Clear the screen\n");
-                        puts("  help  - Show this message\n");
-                        puts("  echo  - Print a message\n");
                 } else if (strncmp(buffer, "echo", 4) == 0 &&
                            (buffer[4] == ' ' || buffer[4] == '\0')) {
                         size_t index = 4;
@@ -36,8 +35,20 @@ void main(void) {
 
                                 puts("\n");
                                 puts(buffer + index);
-                                puts("\n");
                         }
+                } else if (streq(buffer, "ls")) {
+                        puts("\n");
+                        bfs_ls(root);
+                        puts("\n");
+                } else if (streq(buffer, "pwd")) {
+                        puts("\n");
+                        bfs_pwd(root);
+                        puts("\n");
+                } else if (streq(buffer, "help")) {
+                        puts("\nAvailable commands:\n");
+                        puts("  clear - Clear the screen\n");
+                        puts("  help  - Show this message\n");
+                        puts("  echo  - Print a message\n");
                 } else {
                         puts("\nUnknown command: ");
                         puts(buffer);

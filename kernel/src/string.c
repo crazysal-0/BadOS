@@ -35,3 +35,19 @@ int strncmp(const char* s1, const char* s2, size_t n) {
 
         return 0;
 }
+
+void strcpy(char* dest, const char* src) {
+        while ((*dest++ = *src++))
+                ;
+}
+
+void strncpy(char* dest, const char* src, size_t n) {
+        size_t i = 0;
+
+        while (i < n - 1 && src[i] != '\0') {
+                dest[i] = src[i];
+                i++;
+        }
+
+        dest[i] = '\0';
+}
