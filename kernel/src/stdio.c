@@ -62,6 +62,9 @@ void set_color(color_t bg, color_t text) {
 }
 
 void gets(char* buffer, uint16_t size) {
+        if (size <= 0)
+                return;
+
         uint16_t i = 0;
 
         while (i < size - 1) {

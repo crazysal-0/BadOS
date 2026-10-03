@@ -8,7 +8,7 @@ void main(void) {
         clear();
         set_color(BLACK, LIGHT_GREEN);
 
-        puts("Welcome to BareOS!\n");
+        puts("Welcome to BareOS!\n\n");
         while (true) {
                 puts(" > ");
 
@@ -23,9 +23,6 @@ void main(void) {
                         puts("\nAvailable commands:\n");
                         puts("  clear - Clear the screen\n");
                         puts("  help  - Show this message\n");
-                } else if (streq(buffer, "exit")) {
-                        puts("\nExiting the shell...\n");
-                        break;
                 } else {
                         puts("\nUnknown command: ");
                         puts(buffer);
