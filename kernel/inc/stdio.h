@@ -29,3 +29,7 @@ void puts(const char* str);
 void clear(void);
 
 void set_color(color_t bg, color_t text);
+void set_bg_color(color_t bg);
+void set_text_color(color_t text);
+color_t get_bg_color();
+color_t get_text_color();

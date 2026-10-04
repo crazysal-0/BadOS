@@ -32,7 +32,7 @@ boot_drive:
 disk_packet:
 	db 0x10
 	db 0
-	dw 7
+	dw 9
 	dw 0x7e00
 	dw 0
 	dq 1

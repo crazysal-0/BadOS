@@ -1,5 +1,6 @@
 #include "fs.h"
 #include "heap.h"
+#include "stdio.h"
 #include "string.h"
 
 static Folder root;
@@ -44,10 +45,29 @@ File* bfs_create_file(Folder* folder, const char* name, const char* extension) {
 }
 
 Folder* bfs_create_folder(Folder* parent, const char* name) {
-        (void)parent;
-        (void)name;
+        if (parent == NULL || name == NULL)
+                return NULL;
 
-        return NULL;
+        Folder* new_folder = (Folder*)malloc(sizeof(Folder));
+        if (new_folder == NULL)
+                return NULL;
+
+        strncpy(new_folder->name, name, 16);
+
+        new_folder->files = NULL;
+        new_folder->next = NULL;
+
+        if (parent->next == NULL) {
+                parent->next = new_folder;
+        } else {
+                Folder* current = parent->next;
+                while (current->next != NULL) {
+                        current = current->next;
+                }
+                current->next = new_folder;
+        }
+
+        return new_folder;
 }
 
 void bfs_write_file(File* file, const char* contents) {
@@ -78,20 +98,37 @@ File* bfs_find_file(Folder* folder, const char* name) {
 }
 
 void bfs_ls(Folder* folder) {
-        File* file = folder->files;
+        if (folder == NULL)
+                return;
 
+        File* file = folder->files;
         while (file != NULL) {
                 puts(file->name);
 
-                if (file->extension[0] != '\0') {
-                        puts(".");
+                if (file->extension != NULL && file->extension[0] != '\0') {
+                        putc('.');
                         puts(file->extension);
                 }
 
-                puts("\n");
-
+                puts(" ");
                 file = file->next;
         }
+
+        Folder* folder_ = folder->next;
+        if (folder_ != NULL) {
+                color_t text_color = get_text_color();
+                set_text_color(LIGHT_CYAN);
+
+                while (folder_ != NULL) {
+                        puts(folder_->name);
+                        putc('/');
+                        puts(" ");
+                        folder_ = folder_->next;
+                }
+
+                set_text_color(text_color);
+        }
+        putc('\n');
 }
 
 void bfs_pwd(Folder* folder) {

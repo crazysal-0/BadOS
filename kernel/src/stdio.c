@@ -61,6 +61,22 @@ void set_color(color_t bg, color_t text) {
         text_color = text;
 }
 
+void set_text_color(color_t text) {
+        text_color = text;
+}
+
+void set_bg_color(color_t bg) {
+        bg_color = bg;
+}
+
+color_t get_text_color(void) {
+        return text_color;
+}
+
+color_t get_bg_color(void) {
+        return text_color;
+}
+
 void gets(char* buffer, uint16_t size) {
         if (size <= 0)
                 return;

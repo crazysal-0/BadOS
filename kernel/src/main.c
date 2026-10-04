@@ -12,9 +12,9 @@ void main(void) {
         bfs_init();
         Folder* root = bfs_root();
 
-        bfs_create_file(root, "file", "txt");
+        bfs_create_file(root, "settings", "cfg");
 
-        puts("Welcome to BadOS!\n");
+        puts("Welcome to BadOS\n");
 
         while (true) {
                 puts(" > ");
@@ -39,7 +39,18 @@ void main(void) {
                 } else if (streq(buffer, "ls")) {
                         puts("\n");
                         bfs_ls(root);
-                        puts("\n");
+                } else if (strncmp(buffer, "mkd", 3) == 0 &&
+                           (buffer[3] == ' ' || buffer[3] == '\0')) {
+                        size_t index = 4;
+
+                        if (buffer[index] == '\0') {
+                                puts("\nUsage: mkd <name>\n");
+                        } else {
+                                index++;
+
+                                bfs_create_folder(root, buffer + (index - 1));
+                                putc('\n');
+                        }
                 } else if (streq(buffer, "pwd")) {
                         puts("\n");
                         bfs_pwd(root);
