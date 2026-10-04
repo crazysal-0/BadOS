@@ -12,9 +12,9 @@
         })
 
 #define VGA_CURSOR_DISABLE()                                                                       \
-        __asm__ volatile("movb $0x0A, %al\n"                                                       \
-                         "movw $0x3D4, %dx\n"                                                      \
-                         "outb %al, %dx\n"                                                         \
-                         "movb $0x20, %al\n"                                                       \
-                         "movw $0x3D5, %dx\n"                                                      \
-                         "outb %al, %dx\n")\
+        __asm__ volatile("movb $0x0A, %%al\n"                                                      \
+                         "movw $0x3D4, %%dx\n"                                                     \
+                         "outb %%al, %%dx\n"                                                       \
+                         "movb $0x20, %%al\n"                                                      \
+                         "movw $0x3D5, %%dx\n"                                                     \
+                         "outb %%al, %%dx\n")

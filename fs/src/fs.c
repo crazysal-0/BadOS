@@ -69,7 +69,7 @@ bool bfs_remove_folder(Folder* parent, const char* name) {
 
         while (current != NULL) {
                 if (streq(current->name, name)) {
-                        if (current->files != NULL || current->next != NULL)
+                        if (current->files != NULL)
                                 return false;
 
                         if (previous == NULL)
@@ -115,11 +115,12 @@ Folder* bfs_create_folder(Folder* parent, const char* name) {
         if (parent == NULL || name == NULL)
                 return NULL;
 
-        Folder* new_folder = (Folder*)malloc(sizeof(Folder));
+        Folder* new_folder = malloc(sizeof(Folder));
+
         if (new_folder == NULL)
                 return NULL;
 
-        strncpy(new_folder->name, name, 16);
+        strncpy(new_folder->name, name, sizeof(new_folder->name));
 
         new_folder->files = NULL;
         new_folder->next = NULL;
@@ -140,6 +141,9 @@ Folder* bfs_create_folder(Folder* parent, const char* name) {
 }
 
 File* bfs_find_file(Folder* folder, const char* name) {
+        if (folder == NULL || name == NULL)
+                return NULL;
+
         File* current = folder->files;
 
         while (current != NULL) {
@@ -157,10 +161,11 @@ void bfs_ls(Folder* folder) {
                 return;
 
         File* file = folder->files;
+
         while (file != NULL) {
                 puts(file->name);
 
-                if (file->extension != NULL && file->extension[0] != '\0') {
+                if (file->extension[0] != '\0') {
                         putc('.');
                         puts(file->extension);
                 }
@@ -170,19 +175,23 @@ void bfs_ls(Folder* folder) {
         }
 
         Folder* folder_ = folder->next;
+
         if (folder_ != NULL) {
                 color_t text_color = get_text_color();
+
                 set_text_color(LIGHT_CYAN);
 
                 while (folder_ != NULL) {
                         puts(folder_->name);
                         putc('/');
                         puts(" ");
+
                         folder_ = folder_->next;
                 }
 
                 set_text_color(text_color);
         }
+
         putc('\n');
 }
 
@@ -200,11 +209,12 @@ void bfs_exec(File* file) {
                 return;
 
         void (*program)(void) = (void (*)(void))file->contents;
+
         program();
 }
 
 void bfs_write_file(File* file, const void* contents, size_t size) {
-        char* data = malloc(size);
+        unsigned char* data = malloc(size);
 
         if (data == NULL)
                 return;

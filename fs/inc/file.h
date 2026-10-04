@@ -7,7 +7,7 @@ typedef struct File {
         char extension[8];
 
         uint16_t size;
-        char* contents;
+        unsigned char* contents;
 
         struct File* next;
 } File;

@@ -23,15 +23,15 @@ typedef enum {
         LIGHT_MAGENTA = 13,
         YELLOW = 14,
         WHITE = 15,
-} color_t;
+} Color;
 
 void putc(char c);
 void puts(const char* str);
 void clear(void);
 void gets(char* buffer, uint16_t size);
 
-void set_color(color_t bg, color_t text);
-void set_bg_color(color_t bg);
-void set_text_color(color_t text);
-color_t get_bg_color();
-color_t get_text_color();
+void set_color(Color bg, Color text);
+void set_bg_color(Color bg);
+void set_text_color(Color text);
+Color get_bg_color();
+Color get_text_color();

@@ -74,11 +74,11 @@ color_t get_text_color(void) {
 }
 
 color_t get_bg_color(void) {
-        return text_color;
+        return bg_color;
 }
 
 void gets(char* buffer, uint16_t size) {
-        if (size <= 0)
+        if (size == 0)
                 return;
 
         uint16_t i = 0;
