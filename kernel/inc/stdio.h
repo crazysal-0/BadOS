@@ -29,6 +29,7 @@ void putc(char c);
 void puts(const char* str);
 void clear(void);
 void gets(char* buffer, uint16_t size);
+void read_line(char* buffer, uint16_t size);
 
 void set_color(Color bg, Color text);
 void set_bg_color(Color bg);

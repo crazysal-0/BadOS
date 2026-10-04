@@ -3,8 +3,8 @@
 #include "stddef.h"
 #include "stdint.h"
 
-static color_t bg_color = BLACK;
-static color_t text_color = WHITE;
+static Color bg_color = BLACK;
+static Color text_color = WHITE;
 
 static volatile uint16_t* vga_buffer = (volatile uint16_t*)0xB8000;
 
@@ -56,24 +56,24 @@ void clear(void) {
         }
 }
 
-void set_color(color_t bg, color_t text) {
+void set_color(Color bg, Color text) {
         bg_color = bg;
         text_color = text;
 }
 
-void set_text_color(color_t text) {
+void set_text_color(Color text) {
         text_color = text;
 }
 
-void set_bg_color(color_t bg) {
+void set_bg_color(Color bg) {
         bg_color = bg;
 }
 
-color_t get_text_color(void) {
+Color get_text_color(void) {
         return text_color;
 }
 
-color_t get_bg_color(void) {
+Color get_bg_color(void) {
         return bg_color;
 }
 

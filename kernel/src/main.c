@@ -34,7 +34,7 @@ void main(void) {
                 puts(" > ");
 
                 char buffer[256];
-                read_line(buffer, sizeof(buffer));
+                gets(buffer, sizeof(buffer));
 
                 if (streq(buffer, "clear")) {
                         clear();

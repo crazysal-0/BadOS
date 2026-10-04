@@ -5,18 +5,18 @@
 
 static Folder root;
 
-void bfs_init(void) {
+void fs_init(void) {
         root.name[0] = '\0';
         root.files = NULL;
         root.next = NULL;
         root.parent = NULL;
 }
 
-Folder* bfs_root(void) {
+Folder* fs_root(void) {
         return &root;
 }
 
-File* bfs_create_file(Folder* folder, const char* name, const char* extension) {
+File* fs_create_file(Folder* folder, const char* name, const char* extension) {
         File* file = malloc(sizeof(File));
 
         if (file == NULL)
@@ -44,7 +44,7 @@ File* bfs_create_file(Folder* folder, const char* name, const char* extension) {
         return file;
 }
 
-Folder* bfs_find_folder(Folder* folder, const char* name) {
+Folder* fs_find_folder(Folder* folder, const char* name) {
         if (folder == NULL || name == NULL)
                 return NULL;
 
@@ -60,7 +60,7 @@ Folder* bfs_find_folder(Folder* folder, const char* name) {
         return NULL;
 }
 
-bool bfs_remove_folder(Folder* parent, const char* name) {
+bool fs_remove_folder(Folder* parent, const char* name) {
         if (parent == NULL || name == NULL)
                 return false;
 
@@ -87,7 +87,7 @@ bool bfs_remove_folder(Folder* parent, const char* name) {
         return false;
 }
 
-bool bfs_remove_file(Folder* folder, const char* name) {
+bool fs_remove_file(Folder* folder, const char* name) {
         if (folder == NULL || name == NULL)
                 return false;
 
@@ -111,7 +111,7 @@ bool bfs_remove_file(Folder* folder, const char* name) {
         return false;
 }
 
-Folder* bfs_create_folder(Folder* parent, const char* name) {
+Folder* fs_create_folder(Folder* parent, const char* name) {
         if (parent == NULL || name == NULL)
                 return NULL;
 
@@ -140,7 +140,7 @@ Folder* bfs_create_folder(Folder* parent, const char* name) {
         return new_folder;
 }
 
-File* bfs_find_file(Folder* folder, const char* name) {
+File* fs_find_file(Folder* folder, const char* name) {
         if (folder == NULL || name == NULL)
                 return NULL;
 
@@ -156,7 +156,7 @@ File* bfs_find_file(Folder* folder, const char* name) {
         return NULL;
 }
 
-void bfs_ls(Folder* folder) {
+void fs_ls(Folder* folder) {
         if (folder == NULL)
                 return;
 
@@ -177,7 +177,7 @@ void bfs_ls(Folder* folder) {
         Folder* folder_ = folder->next;
 
         if (folder_ != NULL) {
-                color_t text_color = get_text_color();
+                Color text_color = get_text_color();
 
                 set_text_color(LIGHT_CYAN);
 
@@ -195,7 +195,7 @@ void bfs_ls(Folder* folder) {
         putc('\n');
 }
 
-void bfs_pwd(Folder* folder) {
+void fs_pwd(Folder* folder) {
         if (folder->parent == NULL) {
                 puts("/");
                 return;
@@ -204,7 +204,7 @@ void bfs_pwd(Folder* folder) {
         puts(folder->name);
 }
 
-void bfs_exec(File* file) {
+void fs_exec(File* file) {
         if (file == NULL || file->contents == NULL)
                 return;
 
@@ -213,7 +213,7 @@ void bfs_exec(File* file) {
         program();
 }
 
-void bfs_write_file(File* file, const void* contents, size_t size) {
+void fs_write_file(File* file, const void* contents, size_t size) {
         unsigned char* data = malloc(size);
 
         if (data == NULL)
