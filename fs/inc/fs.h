@@ -1,6 +1,7 @@
 #pragma once
 
 #include "folder.h"
+#include "stdbool.h"
 
 void bfs_init(void);
 
@@ -14,5 +15,12 @@ void bfs_write_file(File* file, const char* contents);
 
 File* bfs_find_file(Folder* folder, const char* name);
 
+Folder* bfs_find_folder(Folder* folder, const char* name);
+
+bool bfs_remove_file(Folder* folder, const char* name);
+
+bool bfs_remove_folder(Folder* parent, const char* name);
+
 void bfs_ls(Folder* folder);
+
 void bfs_pwd(Folder* folder);

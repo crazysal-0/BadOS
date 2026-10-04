@@ -10,7 +10,9 @@ void main(void) {
         set_color(BLACK, LIGHT_GREEN);
 
         bfs_init();
+
         Folder* root = bfs_root();
+        Folder* wd = root;
 
         bfs_create_file(root, "settings", "cfg");
 
@@ -38,22 +40,65 @@ void main(void) {
                         }
                 } else if (streq(buffer, "ls")) {
                         puts("\n");
-                        bfs_ls(root);
+                        bfs_ls(wd);
                 } else if (strncmp(buffer, "mkd", 3) == 0 &&
                            (buffer[3] == ' ' || buffer[3] == '\0')) {
-                        size_t index = 4;
+                        size_t index = 3;
 
                         if (buffer[index] == '\0') {
                                 puts("\nUsage: mkd <name>\n");
                         } else {
                                 index++;
 
-                                bfs_create_folder(root, buffer + (index - 1));
+                                bfs_create_folder(wd, buffer + index);
                                 putc('\n');
                         }
+                } else if (strncmp(buffer, "rm", 2) == 0 &&
+                           (buffer[2] == ' ' || buffer[2] == '\0')) {
+                        size_t index = 2;
+
+                        if (buffer[index] == '\0') {
+                                puts("\nUsage: rm <name>\n");
+                        } else {
+                                index++;
+
+                                if (!bfs_remove_file(wd, buffer + index)) {
+                                        puts("\nFile not found: ");
+                                        puts(buffer + index);
+                                        puts("\n");
+                                } else {
+                                        putc('\n');
+                                }
+                        }
+                } else if (strncmp(buffer, "cd", 2) == 0 &&
+                           (buffer[2] == ' ' || buffer[2] == '\0')) {
+                        size_t index = 2;
+
+                        if (buffer[index] == '\0') {
+                                wd = root;
+                        } else {
+                                index++;
+
+                                if (streq(buffer + index, "..")) {
+                                        if (wd->parent != NULL)
+                                                wd = wd->parent;
+                                } else {
+                                        Folder* folder = bfs_find_folder(wd, buffer + index);
+
+                                        if (folder == NULL) {
+                                                puts("\nDirectory not found: ");
+                                                puts(buffer + index);
+                                                puts("\n");
+                                        } else {
+                                                wd = folder;
+                                        }
+                                }
+                        }
+
+                        putc('\n');
                 } else if (streq(buffer, "pwd")) {
                         puts("\n");
-                        bfs_pwd(root);
+                        bfs_pwd(wd);
                         puts("\n");
                 } else if (streq(buffer, "help")) {
                         puts("\nAvailable commands:\n");
@@ -62,6 +107,9 @@ void main(void) {
                         puts("  echo  - Print a message\n");
                         puts("  ls    - List files in the current directory\n");
                         puts("  pwd   - Print the current directory\n");
+                        puts("  cd    - Change directory\n");
+                        puts("  mkd   - Make a directory\n");
+                        puts("  rm    - Remove a file\n");
                 } else {
                         puts("\nUnknown command: ");
                         puts(buffer);

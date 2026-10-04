@@ -44,6 +44,73 @@ File* bfs_create_file(Folder* folder, const char* name, const char* extension) {
         return file;
 }
 
+Folder* bfs_find_folder(Folder* folder, const char* name) {
+        if (folder == NULL || name == NULL)
+                return NULL;
+
+        Folder* current = folder->next;
+
+        while (current != NULL) {
+                if (streq(current->name, name))
+                        return current;
+
+                current = current->next;
+        }
+
+        return NULL;
+}
+
+bool bfs_remove_folder(Folder* parent, const char* name) {
+        if (parent == NULL || name == NULL)
+                return false;
+
+        Folder* current = parent->next;
+        Folder* previous = NULL;
+
+        while (current != NULL) {
+                if (streq(current->name, name)) {
+                        if (current->files != NULL || current->next != NULL)
+                                return false;
+
+                        if (previous == NULL)
+                                parent->next = current->next;
+                        else
+                                previous->next = current->next;
+
+                        return true;
+                }
+
+                previous = current;
+                current = current->next;
+        }
+
+        return false;
+}
+
+bool bfs_remove_file(Folder* folder, const char* name) {
+        if (folder == NULL || name == NULL)
+                return false;
+
+        File* current = folder->files;
+        File* previous = NULL;
+
+        while (current != NULL) {
+                if (streq(current->name, name)) {
+                        if (previous == NULL)
+                                folder->files = current->next;
+                        else
+                                previous->next = current->next;
+
+                        return true;
+                }
+
+                previous = current;
+                current = current->next;
+        }
+
+        return false;
+}
+
 Folder* bfs_create_folder(Folder* parent, const char* name) {
         if (parent == NULL || name == NULL)
                 return NULL;
@@ -56,14 +123,16 @@ Folder* bfs_create_folder(Folder* parent, const char* name) {
 
         new_folder->files = NULL;
         new_folder->next = NULL;
+        new_folder->parent = parent;
 
         if (parent->next == NULL) {
                 parent->next = new_folder;
         } else {
                 Folder* current = parent->next;
-                while (current->next != NULL) {
+
+                while (current->next != NULL)
                         current = current->next;
-                }
+
                 current->next = new_folder;
         }
 
