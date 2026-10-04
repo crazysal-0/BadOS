@@ -19,6 +19,7 @@ void main(void) {
         puts("Welcome to BadOS\n");
 
         while (true) {
+                puts(wd->name);
                 puts(" > ");
 
                 char buffer[256];
