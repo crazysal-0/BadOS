@@ -1,5 +1,6 @@
 #pragma once
 
+#include "stddef.h"
 #include "stdint.h"
 
 #define VGA_WIDTH 80
@@ -27,6 +28,7 @@ typedef enum {
 void putc(char c);
 void puts(const char* str);
 void clear(void);
+void gets(char* buffer, uint16_t size);
 
 void set_color(color_t bg, color_t text);
 void set_bg_color(color_t bg);

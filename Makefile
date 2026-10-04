@@ -1,5 +1,6 @@
 ASM = nasm
 CC = gcc
+OBJCOPY = objcopy
 
 CFLAGS = -m16 -ffreestanding -fno-pie -fno-stack-protector \
 	-fno-asynchronous-unwind-tables -fno-unwind-tables \
@@ -16,6 +17,9 @@ FS_SOURCES = $(wildcard fs/src/*.c)
 
 KERNEL_OBJECTS = $(patsubst kernel/src/%.c,$(BIN)/%.o,$(KERNEL_SOURCES))
 FS_OBJECTS = $(patsubst fs/src/%.c,$(BIN)/%.o,$(FS_SOURCES))
+
+HELLO_BIN = $(BIN)/hello.bin
+HELLO_OBJECT = $(BIN)/hello_data.o
 
 OS_IMAGE = $(BIN)/os.img
 
@@ -35,8 +39,20 @@ $(BIN)/%.o: kernel/src/%.c | $(BIN)
 $(BIN)/%.o: fs/src/%.c | $(BIN)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OS_IMAGE): $(BOOT_OBJECT) $(KERNEL_OBJECTS) $(FS_OBJECTS) linker.ld
-	$(CC) $(LDFLAGS) $(BOOT_OBJECT) $(KERNEL_OBJECTS) $(FS_OBJECTS) -o $@
+$(HELLO_BIN): hello.asm | $(BIN)
+	$(ASM) -f bin $< -o $@
+
+$(HELLO_OBJECT): $(HELLO_BIN)
+	$(OBJCOPY) -I binary -O elf32-i386 -B i386 \
+		$< $@
+
+$(OS_IMAGE): $(BOOT_OBJECT) $(KERNEL_OBJECTS) $(FS_OBJECTS) $(HELLO_OBJECT) linker.ld
+	$(CC) $(LDFLAGS) \
+		$(BOOT_OBJECT) \
+		$(KERNEL_OBJECTS) \
+		$(FS_OBJECTS) \
+		$(HELLO_OBJECT) \
+		-o $@
 
 run: $(OS_IMAGE)
 	qemu-system-i386 -drive format=raw,file=$(OS_IMAGE)

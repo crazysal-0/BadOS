@@ -4,6 +4,9 @@
 #include "stdio.h"
 #include "string.h"
 
+extern unsigned char _binary_bin_hello_bin_start[];
+extern unsigned char _binary_bin_hello_bin_end[];
+
 void main(void) {
         VGA_CURSOR_DISABLE();
         clear();
@@ -16,6 +19,14 @@ void main(void) {
 
         bfs_create_file(root, "settings", "cfg");
 
+        File* hello = bfs_create_file(root, "hello", "bin");
+
+        if (hello != NULL) {
+                size_t hello_size = _binary_bin_hello_bin_end - _binary_bin_hello_bin_start;
+
+                bfs_write_file(hello, _binary_bin_hello_bin_start, hello_size);
+        }
+
         puts("Welcome to BadOS\n");
 
         while (true) {
@@ -27,6 +38,15 @@ void main(void) {
 
                 if (streq(buffer, "clear")) {
                         clear();
+                } else if (streq(buffer, "hello")) {
+                        File* file = bfs_find_file(wd, "hello");
+
+                        if (file == NULL) {
+                                puts("\nProgram not found: hello.bin\n");
+                        } else {
+                                putc('\n');
+                                bfs_exec(file);
+                        }
                 } else if (strncmp(buffer, "echo", 4) == 0 &&
                            (buffer[4] == ' ' || buffer[4] == '\0')) {
                         size_t index = 4;
@@ -105,6 +125,7 @@ void main(void) {
                         puts("\nAvailable commands:\n");
                         puts("  clear - Clear the screen\n");
                         puts("  help  - Show this message\n");
+                        puts("  hello - Execute hello.bin\n");
                         puts("  echo  - Print a message\n");
                         puts("  ls    - List files in the current directory\n");
                         puts("  pwd   - Print the current directory\n");

@@ -51,3 +51,13 @@ void strncpy(char* dest, const char* src, size_t n) {
 
         dest[i] = '\0';
 }
+
+void* memcpy(void* destination, const void* source, size_t size) {
+        unsigned char* dst = destination;
+        const unsigned char* src = source;
+
+        for (size_t i = 0; i < size; i++)
+                dst[i] = src[i];
+
+        return destination;
+}

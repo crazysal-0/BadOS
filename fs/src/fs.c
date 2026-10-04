@@ -139,20 +139,6 @@ Folder* bfs_create_folder(Folder* parent, const char* name) {
         return new_folder;
 }
 
-void bfs_write_file(File* file, const char* contents) {
-        size_t size = strlen(contents);
-
-        char* data = malloc(size + 1);
-
-        if (data == NULL)
-                return;
-
-        strcpy(data, contents);
-
-        file->contents = data;
-        file->size = size;
-}
-
 File* bfs_find_file(Folder* folder, const char* name) {
         File* current = folder->files;
 
@@ -207,4 +193,24 @@ void bfs_pwd(Folder* folder) {
         }
 
         puts(folder->name);
+}
+
+void bfs_exec(File* file) {
+        if (file == NULL || file->contents == NULL)
+                return;
+
+        void (*program)(void) = (void (*)(void))file->contents;
+        program();
+}
+
+void bfs_write_file(File* file, const void* contents, size_t size) {
+        char* data = malloc(size);
+
+        if (data == NULL)
+                return;
+
+        memcpy(data, contents, size);
+
+        file->contents = data;
+        file->size = size;
 }
